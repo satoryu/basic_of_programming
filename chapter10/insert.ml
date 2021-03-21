@@ -51,3 +51,35 @@ let list01 = [
   { seiseki = 40 }
 ]
 let test11 = gakusei_sort list01 = [{ seiseki = 30 }; { seiseki = 40 }; { seiseki = 90 }]
+
+
+(* 問題 10.4 *)
+(* 目的: person_t型のリストを受け取ったら、そのnameフィールドで昇順に整列したリストを返す *)
+(* person_sort: person_t list -> person_t list *)
+
+type person_t = {
+  name : string;
+  bloodtype : string;
+}
+
+let rec person_insert lst p = match lst with
+  [] -> [p]
+  | first :: rest -> if (compare p.name first.name) > 0 then first :: (person_insert rest p) else p :: lst
+
+let rec person_sort lst = match lst with
+  [] -> []
+  | first :: rest -> person_insert (person_sort rest) first
+
+(* テスト *)
+
+let the_girls = [
+  { name = "SU-METAL"; bloodtype = "B" };
+  { name = "MOAMETAL"; bloodtype = "A" };
+  { name = "YUIMETAL"; bloodtype = "O" }
+]
+
+let test12 = person_sort the_girls = [
+  { name = "MOAMETAL"; bloodtype = "A" };
+  { name = "SU-METAL"; bloodtype = "B" };
+  { name = "YUIMETAL"; bloodtype = "O" }
+]
