@@ -48,3 +48,26 @@ let test2 = (insert (Node (Empty, 2, 'v', Black, Empty)) 1 'w') = Node ( Node (E
 let test2 = (insert (Node (Empty, 2, 'v', Black, Empty)) 1 'w') = Node ( Node (Empty, 1, 'w', Red, Empty), 2, 'v', Black, Empty)
 let test3 = (insert (Node (Empty, 1, 'v', Red, Empty)) 2 'w') = Node (Empty, 1, 'v', Black, Node (Empty, 2, 'w', Red, Empty))
 let test4 = (insert (Node (Node (Empty, 2, 'y', Red, Empty), 3, 'z', Black, Empty)) 1 'x') = Node (Node (Empty, 1, 'x', Black, Empty), 2, 'y', Red, Node (Empty, 3, 'z', Black, Empty))
+
+
+(* 問題 20.4 *)
+(* 目的: rb_tree_t型として与えられた赤黒木の中に、与えられたキーを探し、存在すればそのキーに対応する値を返し、無ければ例外Not_foundを返す *)
+(* search: rb_tree_t * 'a -> 'b *)
+
+let search rb_tree key =
+  let rec search_rec tree k = match tree with
+    Empty -> None
+    | Node (tree_left, ky, value, color, tree_right) ->
+      if ky = k then Some (value)
+      else if k < ky then search_rec tree_left k else search_rec tree_right k
+    in (
+      match search_rec rb_tree key with
+      None -> raise Not_found
+      | Some (v) -> v
+    )
+
+
+let test5 = search (Node (Empty, 1, 'v', Black, Empty)) 1 = 'v'
+let test6 = search (Node (Node (Empty, 1,'w', Red, Empty), 2, 'v', Black, Empty)) 1 = 'w'
+(* let test7 = search (Node (Node (Empty, 1,'w', Red, Empty), 2, 'v', Black, Empty)) 3 = 'w' *)
+let test8 = search Empty 3 = 'w'
